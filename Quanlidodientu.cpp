@@ -42,17 +42,20 @@ void menu(){
 				printf("Sai mat khau.\n");
 				system("pause");
 			}
-		}*/else if(luaChon == 1){
-		//	char mk;
-		//	if(mk==2444){
+		}else if(luaChon == 1){
+			int mk;
+			printf("Vui long nhap mat khau: ");
+			scanf("%d",&mk);
+			if(mk==2444){
 				system("cls");
 				menuSP();
-			}/*else{
+			}else{
 				printf("Sai mat khau!!!\n");
 				system("pause");
-			}*/
+			}
 		}
 	}
+}
 int main(){
 	menu();
 }
