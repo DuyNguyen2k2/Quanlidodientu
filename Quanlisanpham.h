@@ -9,6 +9,9 @@ struct SanPham{
 	char ten_sp[50];
 	char don_vi_tinh[10];
 	int sl;
+	char nsx[10];
+	int gia;
+	 
 };
 //ham random ma san pham 8 ki tu
 void rdMaSp(char ma[8]){
@@ -38,24 +41,31 @@ struct SanPham nhapSP() {
 	gets(sp.don_vi_tinh);
 	printf("So luong: ");
 	scanf("%d", &sp.sl);
+	printf("Hang san xuat: ");
+	fflush(stdin);
+	gets(sp.nsx);
+	printf("Gia ban: ");
+	scanf("%d", &sp.gia);
 	return sp;
 }
 void hienThiTenCotSP() {
 	printf("=================================================================\n");
-	printf("%-10s %-30s %-20s %-10s\n", 
-		"Ma SP", "Ten San Pham", "Don vi tinh", "So Luong"
+	printf("%-10s %-15s %-12s %-12s %-10s %-12s\n", 
+		"Ma SP", "Ten San Pham", "Don vi tinh", "So Luong", "Hang sx", "Gia ban(Trieu vnd)"
 		);
 }
 //hien thi thong tin 1 san pham
 void hienThiTTSP(struct SanPham sp){
 	printf("%-10s ", sp.ma_sp);
-	printf("%-30s ", sp.ten_sp);
-	printf("%-20s ",sp.don_vi_tinh);
-	printf("%-10d\n", sp.sl);
+	printf("%-15s ", sp.ten_sp);
+	printf("%-12s ",sp.don_vi_tinh);
+	printf("%-12d ", sp.sl);
+	printf("%-10s ",sp.nsx);
+	printf("%-12d \n",sp.gia);
 }
 
 //doc file danh sach san pham
-void docFileSP(struct SanPham* dssp, int* slsp) {
+void docFileSP(struct SanPham* dssp, int* slsp){
 	FILE* fOut = fopen("sanpham.txt", "r");
 	int i = 0;
 	if(fOut) {
@@ -65,14 +75,15 @@ void docFileSP(struct SanPham* dssp, int* slsp) {
 			char s[100];
 			fscanf(fOut, "%s", sp.ten_sp);
 			fscanf(fOut, "%s", sp.don_vi_tinh);
-			fscanf(fOut, "%10d\n", &sp.sl);
+			fscanf(fOut, "%10d", &sp.sl);
+			fscanf(fOut, "%s", sp.nsx);
+			fscanf(fOut, "%10d\n",&sp.gia);
 			dssp[i++] = sp;
 			if(feof(fOut)) { // thoat chuong trinh
 				break;
 			}
 		}
 	}
-	
 	fclose(fOut);
 	*slsp = i;
 }
@@ -83,8 +94,8 @@ void ghiFileSP(struct SanPham* dssp, int slsp) {
 	int i;
 	for(i = 0; i < slsp; i++) {
 		struct SanPham sp = dssp[i];
-		fprintf(fOut, "%-10s %-30s %-20s %-10d\n",
-		sp.ma_sp, sp.ten_sp, sp.don_vi_tinh, sp.sl);
+		fprintf(fOut, "%-10s %-15s %-12s %-12d %-12s %-12d\n",
+		sp.ma_sp, sp.ten_sp, sp.don_vi_tinh, sp.sl, sp.nsx, sp.gia);
 	}
 	fclose(fOut);
 }
@@ -109,6 +120,45 @@ void sapXep(struct SanPham* dssp, int slsp) {
 		}
 	}
 }
+void sapXepTheoGia(struct SanPham* dssp, int slsp) {
+	int i, j;
+	for(i = 0; i < slsp - 1; i++) {
+		for(j = slsp - 1; j > i; j --) {
+			if(dssp[j].gia< dssp[i].gia) {
+				struct SanPham sp = dssp[j];
+				dssp[j] = dssp[j - 1];
+				dssp[j - 1] = sp;
+			}
+		}
+	}
+}
+void menuSXSP(struct SanPham* dssp, int slsp){
+	while(true){
+		printf("\t0. Huy.");
+		printf("\n\t1. Sap xep theo ten san pham.");
+		printf("\n\t2. Sap xep theo gia san pham.\n");
+		int luaChon;
+		printf("Moi nhap lua chon: ");
+		scanf("%d", &luaChon);
+		if(luaChon == 1){
+			sapXep(dssp, slsp);
+			printf("\nDanh sach nhan vien sau khi sap xep theo ten a-z:\n");
+		//	hienThiDSSP(dssp, slsp);
+			break;
+		}else if(luaChon == 2){
+			sapXepTheoGia(dssp, slsp);
+			printf("\nDanh sach san pham sau khi sap xep theo gia tang dan:\n");
+		//	hienThiDSSP(dssp, slsp);
+			break;
+		}else if(luaChon == 0){
+			break;
+		}else{
+			printf("Lua chon ko hop le. Hay nhap lai.\n");
+			system("pause");
+		}
+	}
+}
+
 // Ham tim theo ten
 void tim_Theo_Ten(struct SanPham* dssp, int slsp) {
 	char ten[20];
@@ -124,10 +174,28 @@ void tim_Theo_Ten(struct SanPham* dssp, int slsp) {
 	}
 	if(timSp == 0) {
 		printf("\nKhong co san pham %s trong danh sach!\n", ten);
+		system("pause");
+	}
+}
+void tim_Theo_Ten_nsx(struct SanPham* dssp, int slsp){
+	char ten_nsx[20];
+	printf("Nhap ten nsx: ");
+	scanf("%s", ten_nsx);
+	hienThiTenCotSP();
+	int i, timSP = 0;
+	for(i = 0; i < slsp; i++) {
+		if(strcmp(ten_nsx, dssp[i].nsx) == 0){
+			hienThiTTSP(dssp[i]);
+			timSP = 1;
+		}
+	}
+	if(timSP == 0) {
+		printf("\nKhong co san pham %s trong danh sach!\n", ten_nsx);
+		system("pause");
 	}
 }
 // Ham tim theo ma sp
-void tim_Theo_Ma(struct SanPham* dssp, int slsp) {
+void tim_Theo_Ma(struct SanPham* dssp, int slsp){
 	char ma[20];
 	printf("Nhap ma: ");
 	scanf("%s", ma);
@@ -141,7 +209,28 @@ void tim_Theo_Ma(struct SanPham* dssp, int slsp) {
 	}
 	if(timSp== 0) {
 		printf("\nKhong co san pham co ma %s trong danh sach!\n", ma);
+		system("pause");
 	}
+}
+void tim_Theo_Gia(struct SanPham* dssp, int slsp, int min, int max){
+	hienThiTenCotSP();
+	int i, timsp=0;
+	for(i=0;i<slsp;i++){
+		if(dssp[i].gia>= min && dssp[i].gia<max){
+			hienThiTTSP(dssp[i]);
+			timsp=1;
+		}
+	}
+}
+int TimGiaMax(struct SanPham*dssp, int slsp){
+	hienThiTenCotSP();
+	int max=dssp[0].gia;
+	for(int i=0;i<slsp;i++){
+		if(dssp[i].gia>max){
+			max=dssp[i].gia;
+		}
+	}
+	return max;
 }
 // Ham tim kiem
 int searchSp(struct SanPham* dssp, char* ma_Search, int slsp){
@@ -155,9 +244,11 @@ int searchSp(struct SanPham* dssp, char* ma_Search, int slsp){
 // Menu tim kiem sp
 void menu_TK_SP(struct SanPham* dssp, int slsp){
 	while(true){
-		printf("\n\t0. Thoat.");
+		printf("\t0. Thoat.");
 		printf("\n\t1. Tim kiem theo ma san pham.");
 		printf("\n\t2. Tim kiem theo ten san pham.");
+		printf("\n\t3. Tim kiem theo ten nsx.");
+		printf("\n\t4. Tim kiem theo gia sp.");
 		int luaChon;
 		printf("\nMoi nhap lua chon: ");
 		scanf("%d", &luaChon);
@@ -171,10 +262,60 @@ void menu_TK_SP(struct SanPham* dssp, int slsp){
 			printf("-----------------------------------------------------"
 			"----------------------------------------------------------------\n");
 			break;
+		}else if(luaChon == 3){
+			tim_Theo_Ten_nsx(dssp, slsp);
+			printf("-----------------------------------------------------"
+			"----------------------------------------------------------------\n");
+			break;
+		}else if(luaChon==4){
+			while(true){
+				printf("\t0. Thoat.");
+				printf("\n\t1. Gia tu 0->5 trieu.");
+				printf("\n\t2. Gia tu 5 trieu->10 trieu.");
+				printf("\n\t3. Gia tu 10 trieu->20 trieu.");
+				printf("\n\t4. Gia tren 20 trieu.");
+				int lc;
+				printf("\nMoi nhap lua chon: ");
+				scanf("%d", &lc);
+				if(lc==1){
+					tim_Theo_Gia(dssp,slsp,0,5);
+					printf("-----------------------------------------------------"
+					"----------------------------------------------------------------\n");
+					break;
+				}else if(lc==2){
+					tim_Theo_Gia(dssp,slsp,5,10);
+					printf("-----------------------------------------------------"
+					"----------------------------------------------------------------\n");
+					break;
+				}else if(lc==3){
+					tim_Theo_Gia(dssp,slsp,10,20);
+					printf("-----------------------------------------------------"
+					"----------------------------------------------------------------\n");
+					break;
+				}else if(lc==4){
+					int min=20;
+					if(TimGiaMax(dssp,slsp)<=20){
+						int max=20+1;
+					}else{
+						int max=TimGiaMax(dssp,slsp)+1;
+						tim_Theo_Gia(dssp,slsp,min,max);
+					}
+					printf("-----------------------------------------------------"
+					"----------------------------------------------------------------\n");
+					break;
+				}else if(luaChon == 0){
+					break;
+			}else{
+			printf("Lua chon ko hop le. Hay nhap lai.\n");
+			system("pause");
+		}	
+		}
+		break;
 		}else if(luaChon == 0){
 			break;
 		}else{
 			printf("Lua chon ko hop le. Hay nhap lai.\n");
+			system("pause");
 		}
 	}
 }
@@ -185,19 +326,28 @@ void updateSp(struct SanPham* dssp, int slsp){
 	scanf("%s", ma);
 	if(searchSp(dssp, ma, slsp) > -1){
 		int i = searchSp(dssp, ma, slsp);
-		printf("Nhap ten san pham can sua\n");
+		printf("Nhap Ten san pham moi\n");
 		printf("Ten san pham truoc do: %s: ", dssp[i].ten_sp);
 		getchar();
 		scanf("%s",  &dssp[i].ten_sp);
+		printf("Nhap Don vi tinh moi\n");
 		printf("Don vi tinh truoc do: %s: ", dssp[i].don_vi_tinh);
 		scanf("%s", &dssp[i].don_vi_tinh);
+		printf("Nhap So luong moi\n");
 		printf("So luong truoc do: %d : ", dssp[i].sl);
 		scanf("%d", &dssp[i].sl);
+		printf("Nhap Hang sx moi\n");
+		printf("Hang sx truoc do: %s : ",dssp[i].nsx);
+		scanf("%s", &dssp[i].nsx);
+		printf("Nhap Gia ban moi\n");
+		printf("Gia ban truoc do: %d : ",dssp[i].gia);
+		scanf("%d", &dssp[i].gia);
 		printf("Danh sach san pham sau khi sua:\n");
-		hienThiDSSP(dssp, slsp);
+	//	hienThiDSSP(dssp, slsp);
 		ghiFileSP(dssp, slsp);
 	}else{
 		printf("Khong co san pham nao mang ma la %s.\n", ma);
+		system("pause");
 	}
 }
 // Ham xoa sp
@@ -218,6 +368,7 @@ void xoaSP(SanPham* dssp, int &slsp){
 		ghiFileSP(dssp, slsp);
 	}else{
 		printf("Khong co san pham nao mang ma la %s.\n", ma);
+		system("pause");
 	}
 }
 // Menu lua chon
@@ -253,7 +404,7 @@ void menuSP(){
 			hienThiDSSP(dssp, slsp);
 			system("pause");
 		}else if(luaChon == 3){
-			sapXep(dssp,slsp);
+			menuSXSP(dssp,slsp);
 		//	hienThiDSSP(dssp, slsp);
 			ghiFileSP(dssp, slsp);
 			printf("Sap xep san pham thanh cong!!\n");
