@@ -154,7 +154,6 @@ void menuSXSP(struct SanPham* dssp, int slsp){
 			break;
 		}else{
 			printf("Lua chon ko hop le. Hay nhap lai.\n");
-			system("pause");
 		}
 	}
 }
@@ -174,7 +173,6 @@ void tim_Theo_Ten(struct SanPham* dssp, int slsp) {
 	}
 	if(timSp == 0) {
 		printf("\nKhong co san pham %s trong danh sach!\n", ten);
-		system("pause");
 	}
 }
 void tim_Theo_Ten_nsx(struct SanPham* dssp, int slsp){
@@ -191,7 +189,6 @@ void tim_Theo_Ten_nsx(struct SanPham* dssp, int slsp){
 	}
 	if(timSP == 0) {
 		printf("\nKhong co san pham %s trong danh sach!\n", ten_nsx);
-		system("pause");
 	}
 }
 // Ham tim theo ma sp
@@ -209,7 +206,6 @@ void tim_Theo_Ma(struct SanPham* dssp, int slsp){
 	}
 	if(timSp== 0) {
 		printf("\nKhong co san pham co ma %s trong danh sach!\n", ma);
-		system("pause");
 	}
 }
 void tim_Theo_Gia(struct SanPham* dssp, int slsp, int min, int max){
@@ -220,6 +216,8 @@ void tim_Theo_Gia(struct SanPham* dssp, int slsp, int min, int max){
 			hienThiTTSP(dssp[i]);
 			timsp=1;
 		}
+	}if(timsp== 0) {
+		printf("\nKhong co san pham trong khoang gia nay!\n");
 	}
 }
 int TimGiaMax(struct SanPham*dssp, int slsp){
