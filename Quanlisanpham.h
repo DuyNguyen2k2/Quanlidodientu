@@ -120,11 +120,23 @@ void sapXep(struct SanPham* dssp, int slsp) {
 		}
 	}
 }
-void sapXepTheoGia(struct SanPham* dssp, int slsp) {
+void sapXepTheoGiaTD(struct SanPham* dssp, int slsp){
 	int i, j;
 	for(i = 0; i < slsp - 1; i++) {
 		for(j = slsp - 1; j > i; j --) {
 			if(dssp[j].gia< dssp[i].gia) {
+				struct SanPham sp = dssp[j];
+				dssp[j] = dssp[j - 1];
+				dssp[j - 1] = sp;
+			}
+		}
+	}
+}
+void sapXepTheoGiaGD(struct SanPham* dssp, int slsp){
+	int i, j;
+	for(i = 0; i < slsp - 1; i++) {
+		for(j = slsp - 1; j > i; j --) {
+			if(dssp[j].gia > dssp[i].gia) {
 				struct SanPham sp = dssp[j];
 				dssp[j] = dssp[j - 1];
 				dssp[j - 1] = sp;
@@ -146,8 +158,26 @@ void menuSXSP(struct SanPham* dssp, int slsp){
 		//	hienThiDSSP(dssp, slsp);
 			break;
 		}else if(luaChon == 2){
-			sapXepTheoGia(dssp, slsp);
-			printf("\nDanh sach san pham sau khi sap xep theo gia tang dan:\n");
+			while(true){
+				printf("\t0. Huy.");
+				printf("\n\t1. Sap xep theo gia san pham tang dan.");
+				printf("\n\t2. Sap xep theo gia san pham giam dan.\n");
+				int luaChon;
+				printf("Moi nhap lua chon: ");
+				scanf("%d", &luaChon);
+				if(luaChon==1){
+					sapXepTheoGiaTD(dssp, slsp);
+					printf("\nDanh sach san pham sau khi sap xep theo gia tang dan:\n");
+					break;	
+				}else if(luaChon==2){
+					sapXepTheoGiaGD(dssp, slsp);
+					printf("\nDanh sach san pham sau khi sap xep theo gia giam dan:\n");
+					break;
+				}else if(luaChon==0){
+					break;
+				}
+			}
+			
 		//	hienThiDSSP(dssp, slsp);
 			break;
 		}else if(luaChon == 0){
