@@ -238,6 +238,7 @@ void tim_Theo_Ma(struct SanPham* dssp, int slsp){
 		printf("\nKhong co san pham co ma %s trong danh sach!\n", ma);
 	}
 }
+// tim theo gia 
 void tim_Theo_Gia(struct SanPham* dssp, int slsp, int min, int max){
 	hienThiTenCotSP();
 	int i, timsp=0;
