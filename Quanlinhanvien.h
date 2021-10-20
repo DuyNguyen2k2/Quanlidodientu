@@ -320,14 +320,14 @@ void timTheoHoDem(struct NhanVien* ds, int slnv) {
 	printf("Nhap Ho dem: ");
 	scanf("%s", &Dem);
 	hienThiTenCot();
-	int i, timNV = 0;
+	int i, timnV = 0;
 	for(i = 0; i < slnv; i++) {
 		if(strcmp(Dem, ds[i].hoVaTen.dem) == 0) {
 			hienThiTTNV(ds[i]);
-			timNV = 1;
+			timnV = 1;
 		}
 	}
-	if(timNV == 0) {
+	if(timnV == 0) {
 		printf("\nKhong co nhan vien co ho dem %s trong danh sach!\n", Dem);
 	}
 }
@@ -433,6 +433,7 @@ void menuTK(struct NhanVien* dsnv, int slnv){
 					timTheoTen(dsnv,slnv);
 					printf("-----------------------------------------------------"
 					"----------------------------------------------------------------\n");
+					break;
 				}else if(luaChon==0){
 					break;
 				}else{
@@ -575,6 +576,7 @@ void updateNV(struct NhanVien* ds, int slnv){
 						printf("Lua chon khong hop le. Hay nhap lai!!");
 					}
 				}
+				break; 
 			}else if(luaChon==2){
 				printf("Nam sinh truoc do: %d: ", ds[i].namsinh);
 				scanf("%d", &ds[i].namsinh);
