@@ -22,6 +22,7 @@ struct NhanVien {
 	char gioiTinh[10];
 	char Diachi[20];
 	char Sodt[12];
+//	char chucvu[20];
 };
 
 
@@ -64,6 +65,8 @@ struct NhanVien nhapNV() {
 	scanf("%s",nv.Diachi);
 	printf("So dien thoai: ");
 	scanf("%s",nv.Sodt);
+//	printf("Chuc vu: ");
+//	scanf("%s", nv.chucvu)
 	return nv;
 }
 
@@ -90,6 +93,54 @@ void sapXepTheoTenza(struct NhanVien* ds, int slnv) {
 	for(i = 0; i < slnv - 1; i++) {
 		for(j = slnv - 1; j > i; j --) {
 			if(strcmp(ds[j].hoVaTen.ten, ds[j-1].hoVaTen.ten) > 0) {
+				struct NhanVien nv = ds[j];
+				ds[j] = ds[j - 1];
+				ds[j - 1] = nv;
+			}
+		}
+	}
+}
+void sapXepTheoHoaz(struct NhanVien* ds, int slnv) {
+	int i, j;
+	for(i = 0; i < slnv - 1; i++) {
+		for(j = slnv - 1; j > i; j --) {
+			if(strcmp(ds[j].hoVaTen.ho, ds[j-1].hoVaTen.ho) < 0) {
+				struct NhanVien nv = ds[j];
+				ds[j] = ds[j - 1];
+				ds[j - 1] = nv;
+			}
+		}
+	}
+}
+void sapXepTheoHoza(struct NhanVien* ds, int slnv) {
+	int i, j;
+	for(i = 0; i < slnv - 1; i++) {
+		for(j = slnv - 1; j > i; j --) {
+			if(strcmp(ds[j].hoVaTen.ho, ds[j-1].hoVaTen.ho) > 0) {
+				struct NhanVien nv = ds[j];
+				ds[j] = ds[j - 1];
+				ds[j - 1] = nv;
+			}
+		}
+	}
+}
+void sapXepTheoHoDemaz(struct NhanVien* ds, int slnv) {
+	int i, j;
+	for(i = 0; i < slnv - 1; i++) {
+		for(j = slnv - 1; j > i; j --) {
+			if(strcmp(ds[j].hoVaTen.dem, ds[j-1].hoVaTen.dem) < 0) {
+				struct NhanVien nv = ds[j];
+				ds[j] = ds[j - 1];
+				ds[j - 1] = nv;
+			}
+		}
+	}
+}
+void sapXepTheoHoDemza(struct NhanVien* ds, int slnv) {
+	int i, j;
+	for(i = 0; i < slnv - 1; i++) {
+		for(j = slnv - 1; j > i; j --) {
+			if(strcmp(ds[j].hoVaTen.dem, ds[j-1].hoVaTen.dem) > 0) {
 				struct NhanVien nv = ds[j];
 				ds[j] = ds[j - 1];
 				ds[j - 1] = nv;
@@ -124,12 +175,14 @@ void sapXepTheoNamSinhGD(struct NhanVien* ds, int slnv) {
 void menuSX(struct NhanVien* dsnv, int slnv){
 	while(true){
 		printf("\t0. Huy.");
-		printf("\n\t1. Sap xep theo ten nhan vien.");
-		printf("\n\t2. Sap xep theo nam sinh nhan vien.\n");
+		printf("\n\t1. Sap xem theo ho nhan vien.");
+		printf("\n\t2. Sap xem theo ho dem nhan vien.");
+		printf("\n\t3. Sap xep theo ten nhan vien.");
+		printf("\n\t4. Sap xep theo nam sinh nhan vien.\n");
 		int luaChon;
 		printf("Moi nhap lua chon: ");
 		scanf("%d", &luaChon);
-		if(luaChon == 1){
+		if(luaChon == 3){
 			while(true){
 				printf("\t0. Huy");
 				printf("\n\t1. Sap xep tu a-z.");
@@ -152,7 +205,7 @@ void menuSX(struct NhanVien* dsnv, int slnv){
 				}
 			}
 			break;
-		}else if(luaChon == 2){
+		}else if(luaChon == 4){
 			while(true){
 				printf("\t0. Huy");
 				printf("\n\t1. Sap xep theo nam sinh tang dan.");
@@ -175,6 +228,52 @@ void menuSX(struct NhanVien* dsnv, int slnv){
 				}
 			}
 			break;
+		}else if(luaChon==1){
+			while(true){
+				printf("\t0. Huy");
+				printf("\n\t1. Sap xep tu a-z.");
+				printf("\n\t2. Sap xep tu z-a.\n");
+				int luaChon;
+				printf("Moi nhap lua chon: ");
+				scanf("%d",&luaChon);
+				if(luaChon==1){
+					sapXepTheoHoaz(dsnv,slnv);
+					printf("Sap xep thanh cong!!\n");
+					break;
+				}else if(luaChon==2){
+					sapXepTheoHoza(dsnv,slnv);
+					printf("Sap xep thanh cong!!\n");
+					break;
+				}else if(luaChon==0){
+					break;
+				}else{
+					printf("Lua chon ko hop le. Hay nhap lai.\n");
+				}
+			}
+			break;
+		}else if(luaChon==2){
+			while(true){
+				printf("\t0. Huy");
+				printf("\n\t1. Sap xep tu a-z.");
+				printf("\n\t2. Sap xep tu z-a.\n");
+				int luaChon;
+				printf("Moi nhap lua chon: ");
+				scanf("%d",&luaChon);
+				if(luaChon==1){
+					sapXepTheoHoDemaz(dsnv,slnv);
+					printf("Sap xep thanh cong!!\n");
+					break;
+				}else if(luaChon==2){
+					sapXepTheoHoDemza(dsnv,slnv);
+					printf("Sap xep thanh cong!!\n");
+					break;
+				}else if(luaChon==0){
+					break;
+				}else{
+					printf("Lua chon ko hop le. Hay nhap lai.\n");
+				}
+			}
+			break;
 		}else if(luaChon == 0){
 			break;
 		}else{
@@ -187,7 +286,7 @@ void menuSX(struct NhanVien* dsnv, int slnv){
 void timTheoTen(struct NhanVien* ds, int slnv) {
 	char ten[20];
 	printf("Nhap ten: ");
-	scanf("%s", ten);
+	scanf("%s", &ten);
 	hienThiTenCot();
 	int i, timNV = 0;
 	for(i = 0; i < slnv; i++) {
@@ -197,13 +296,13 @@ void timTheoTen(struct NhanVien* ds, int slnv) {
 		}
 	}
 	if(timNV == 0) {
-		printf("\nKhong co nhan vien %s trong danh sach!\n", ten);
+		printf("\nKhong co nhan vien co ten %s trong danh sach!\n", ten);
 	}
 }
 void timTheoHo(struct NhanVien* ds, int slnv) {
 	char Ho[20];
 	printf("Nhap Ho: ");
-	scanf("%s", Ho);
+	scanf("%s", &Ho);
 	hienThiTenCot();
 	int i, timNV = 0;
 	for(i = 0; i < slnv; i++) {
@@ -213,13 +312,13 @@ void timTheoHo(struct NhanVien* ds, int slnv) {
 		}
 	}
 	if(timNV == 0) {
-		printf("\nKhong co nhan vien %s trong danh sach!\n", Ho);
+		printf("\nKhong co nhan vien co ho %s trong danh sach!\n", Ho);
 	}
 }
 void timTheoHoDem(struct NhanVien* ds, int slnv) {
 	char Dem[20];
 	printf("Nhap Ho dem: ");
-	scanf("%s", Dem);
+	scanf("%s", &Dem);
 	hienThiTenCot();
 	int i, timNV = 0;
 	for(i = 0; i < slnv; i++) {
@@ -229,13 +328,13 @@ void timTheoHoDem(struct NhanVien* ds, int slnv) {
 		}
 	}
 	if(timNV == 0) {
-		printf("\nKhong co nhan vien %s trong danh sach!\n", Dem);
+		printf("\nKhong co nhan vien co ho dem %s trong danh sach!\n", Dem);
 	}
 }
 void timTheodc(struct NhanVien* ds, int slnv){
 	char dc[20];
 	printf("Nhap dia chi: ");
-	scanf("%s",dc);
+	scanf("%s",&dc);
 	hienThiTenCot();
 	int i, timNV=0;
 	for(int i=0;i<slnv;i++){
@@ -245,13 +344,13 @@ void timTheodc(struct NhanVien* ds, int slnv){
 		}
 	}
 	if(timNV == 0) {
-		printf("\nKhong co nhan vien %s trong danh sach!\n", dc);
+		printf("\nKhong co nhan vien co dia chi %s trong danh sach!\n", dc);
 	}
 }
 void timTheoMa(struct NhanVien* ds, int slnv) {
 	char ma[20];
 	printf("Nhap ma: ");
-	scanf("%s", ma);
+	scanf("%s", &ma);
 	hienThiTenCot();
 	int i, timNV = 0;
 	for(i = 0; i < slnv; i++) {
@@ -283,7 +382,7 @@ void timTheons(struct NhanVien* ds, int slnv){
 void timTheoGT(struct NhanVien* ds, int slnv){
 	char gt[10];
 	printf("Nhap Gioi tinh: ");
-	scanf("%s",gt);
+	scanf("%s",&gt);
 	hienThiTenCot();
 	int timNV=0;
 	for(int i=0;i<slnv;i++){
@@ -316,7 +415,7 @@ void menuTK(struct NhanVien* dsnv, int slnv){
 				printf("\t0. Huy.");
 				printf("\n\t1. Tim kiem theo Ho nhan vien.");
 				printf("\n\t2. Tim kiem theo Ho dem nhan vien.");
-				printf("\n\t3. Tim kiem theo ten nhan vien.");
+				printf("\n\t3. Tim kiem theo Ten nhan vien.");
 				int luaChon;
 				printf("\nMoi nhap lua chon: ");
 				scanf("%d", &luaChon);
@@ -434,14 +533,14 @@ void updateNV(struct NhanVien* ds, int slnv){
 		int i = searchNV(ds, ma, slnv);
 		hienThiTTNV(ds[i]);
 		while(true){
-			printf("\t0. Huy");
+			printf("\n\t0. Huy");
 			printf("\n\t1. Sua ho ten Nhan vien.");
 			printf("\n\t2. Sua nam sinh Nhan vien.");
 			printf("\n\t3. Sua gioi tinh Nhan vien.");
 			printf("\n\t4. Sua dia chi Nhan vien.");
 			printf("\n\t5. Sua so dien thoai Nhan vien.");
 			int luaChon;
-			printf("Nhap lua chon: ");
+			printf("\nNhap lua chon: ");
 			scanf("%d",&luaChon);
 			if(luaChon==1){
 				while(true){
@@ -581,4 +680,3 @@ void menuNV(){
 		}
 	}
 }
-
